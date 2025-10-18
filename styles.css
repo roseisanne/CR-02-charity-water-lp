@@ -25,16 +25,17 @@ Fonts:
 
 /* Set up the main font and background color for the whole page */
 body {
-  background-color: #f4f8fb; /* Soft light blue for a fresh look */
+  background-color: #FFC907; /* fallback page background */
   font-family: 'Avenir', 'Proxima Nova', Arial, sans-serif;
   margin: 0;
   padding: 0;
   color: #222;
+  padding-top: 72px; /* space for fixed logo bar */
 }
 
 /* Add a slight shadow and rounded corners to each section for depth */
 section {
-  background: #fff; /* White background for sections */
+  background: #fff; /* opaque white sections */
   border-radius: 12px; /* Rounded corners */
   box-shadow: 0 2px 8px rgba(46, 157, 247, 0.07); /* Soft blue shadow */
   margin: 24px 10px; /* Space between sections */
@@ -43,21 +44,77 @@ section {
 
 /* Hero Section Styles */
 .hero {
-  position: relative; /* Needed for overlay */
-  /* Set a background image that covers the whole section */
-  background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80');
-  background-size: cover;      /* Make the image cover the whole area */
-  background-position: center; /* Center the image */
-  background-repeat: no-repeat;
-  color: #fff;                 /* White text for contrast */
-  text-align: center;          /* Center the text */
-  padding: 60px 20px;          /* Add space above and below */
-  border-radius: 0 0 16px 16px; /* Only round bottom corners */
+  display: block;
+  width: 100%;
+  /* Keep rounded corners on the bottom only to match the previous look */
+  border-radius: 0 0 16px 16px;
+  overflow: hidden; /* Ensure children don't overflow the rounded corners */
+}
 
-  /* Add a dark overlay for better text readability */
-  /* This uses a simple linear-gradient overlay */
-  background-blend-mode: darken;
-  background-color: rgba(46, 157, 247, 0.45); /* Blue overlay */
+/* Top area: the photo that should take roughly 70% of the viewport height */
+.hero-image {
+  height: 70vh; /* 70% of the viewport height */
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.hero-img-el {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;     /* ensure the img covers the container */
+  object-position: center center; /* fill entire area */
+}
+
+/* Logo in the top-left corner */
+.site-logo-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 72px;
+  background: #2E9DF7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.site-logo {
+  height: 34px;
+  width: auto;
+  display: block;
+}
+
+/* Bottom area: the yellow band covering the remaining ~30% */
+.hero-content {
+  height: calc(30vh - 2px); /* slightly less to allow for rounding artifacts */
+  background-color: #FFC907; /* Primary Yellow */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* center vertically */
+  align-items: center;     /* center horizontally */
+  text-align: center;
+  padding: 12px 20px;
+  color: #222; /* dark text on yellow */
+}
+
+.hero-content h1 {
+  color: #111;
+  font-size: 1.8em;
+  margin: 0 0 8px 0;
+}
+
+.hero-content p {
+  margin: 0 0 12px 0;
+  font-size: 1.05em;
+  max-width: 520px; /* compress lines while keeping centered */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Make the headline bold and modern */
@@ -111,24 +168,24 @@ h2 {
 /* Donate Button Styles */
 .donate-button {
   display: inline-block;
-  background-color: #4FCB53; /* Green */
+  background-color: #8BD1CB; /* Light Blue (soft) */
   color: #fff;
-  padding: 14px 32px;
+  padding: 20px 56px; /* larger button with more space */
   text-decoration: none;
-  border-radius: 6px;
-  font-weight: bold;
-  font-size: 1.1em;
-  margin-top: 18px;
-  box-shadow: 0 2px 8px rgba(79, 203, 83, 0.10);
-  transition: background 0.3s, transform 0.2s;
+  border-radius: 8px;
+  font-weight: 400; /* normal weight */
+  font-size: 1.12em; /* slightly bigger text */
+  margin-top: 10px;
+  box-shadow: 0 4px 14px rgba(139, 209, 203, 0.12);
+  transition: background 0.25s, transform 0.12s;
   border: none;
   cursor: pointer;
 }
 
 /* Change button color when hovered */
 .donate-button:hover {
-  background-color: #159A48; /* Dark Green */
-  transform: translateY(-2px) scale(1.04); /* Slight lift */
+  background-color: #8Bd1CB; /* slightly darker light-blue */
+  transform: translateY(-2px) scale(1.03); /* Slight lift */
 }
 
 /* Add some spacing between sections */
@@ -145,19 +202,33 @@ section {
 /* This media query applies styles when the screen is 600px wide or less (like on most phones) */
 @media (max-width: 600px) {
   /* Make hero section padding smaller on small screens */
-  .hero {
-    padding: 32px 8px;
-    font-size: 1em;
+  /* Reduce the hero photo height on small screens so content stays visible */
+  .hero-image {
+    height: 100vh;
   }
 
-  /* Make headline font size smaller so it fits on small screens */
-  .hero h1 {
-    font-size: 1.4em;
+  .site-logo {
+    height: 20px;
   }
 
-  /* Make subheadline font size smaller */
-  .hero p {
-    font-size: 1em;
+  .hero-img-el {
+    transform: translateX(-50%) scale(1); /* reset zoom on small screens */
+    object-position: 50% 30%;
+  }
+
+  /* Let the yellow band size itself based on its content on small screens */
+  .hero-content {
+    height: auto;
+    padding: 18px 12px;
+  }
+
+  /* Adjust headline and subheadline sizes for phones */
+  .hero-content h1 {
+    font-size: 1.2em;
+  }
+
+  .hero-content p {
+    font-size: 0.98em;
   }
 
   /* Make story and call-to-action sections have less padding */
@@ -193,6 +264,6 @@ section {
   }
 
   .impact-image {
-    width: 300px;
+    width: 500px;
   }
 }
