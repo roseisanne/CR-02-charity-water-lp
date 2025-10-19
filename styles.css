@@ -25,7 +25,7 @@ Fonts:
 
 /* Set up the main font and background color for the whole page */
 body {
-  background-color: #FFC907; /* fallback page background */
+  background-color: #1a1a1a; /* fallback page background */
   font-family: 'Avenir', 'Proxima Nova', Arial, sans-serif;
   margin: 0;
   padding: 0;
@@ -35,11 +35,18 @@ body {
 
 /* Add a slight shadow and rounded corners to each section for depth */
 section {
-  background: #fff; /* opaque white sections */
-  border-radius: 12px; /* Rounded corners */
-  box-shadow: 0 2px 8px rgba(46, 157, 247, 0.07); /* Soft blue shadow */
-  margin: 24px 10px; /* Space between sections */
-  padding: 24px 16px;
+  border-radius: 0; /* remove rounded corners */
+  box-shadow: none; /* remove shadows for a sleek look */
+  margin: 0; /* remove vertical gaps between sections */
+  padding: x 0; /* vertical padding, horizontal constrained on inner elements */
+  width: 100%;
+  text-align: center; /* center section content */
+}
+
+/* Constrain inner content of every section to a consistent width and center it */
+section > * {
+  margin: 0 auto;
+  padding: 0 16px; /* maintain horizontal padding inside the constrained area */
 }
 
 /* Hero Section Styles */
@@ -47,13 +54,14 @@ section {
   display: block;
   width: 100%;
   /* Keep rounded corners on the bottom only to match the previous look */
-  border-radius: 0 0 16px 16px;
-  overflow: hidden; /* Ensure children don't overflow the rounded corners */
+  border-radius: 0;
+  overflow: hidden; /* 
+  Ensure children don't overflow the rounded corners */
 }
 
 /* Top area: the photo that should take roughly 70% of the viewport height */
 .hero-image {
-  height: 70vh; /* 70% of the viewport height */
+  height: 80vh; /* 70% of the viewport height */
   position: relative;
   width: 100%;
   overflow: hidden;
@@ -76,7 +84,7 @@ section {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 72px;
+  height: 50px;
   background: #2E9DF7;
   display: flex;
   align-items: center;
@@ -88,6 +96,7 @@ section {
   height: 34px;
   width: auto;
   display: block;
+  border-radius: 0;
 }
 
 /* Bottom area: the yellow band covering the remaining ~30% */
@@ -130,22 +139,54 @@ section {
 .hero p {
   font-size: 1.2em;
   margin-top: 0;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.12);
 }
 
 /* Story Section Styles */
-.story {
-  background-color: #8BD1CB; /* Secondary Light Blue */
-  color: #222;
-  text-align: center;
-  padding: 30px 20px;
-}
 
 /* Add accent color to section headings */
+.h2,
 h2 {
-  color: #2E9DF7; /* Primary blue */
+  color: #fff7e1; /* Primary blue */
   margin-top: 0;
   font-weight: bold;
+  text-align: center;
+}
+
+/* Use Avenir for all headers */
+h1, h2, h3 {
+  font-family: 'Avenir', 'Proxima Nova', Arial, sans-serif;
+  text-align: center;
+}
+
+/* Make the "Our Story" heading larger */
+.story {
+  background-color: #000; /* Our Story section background: black */
+  color: #fff7e1; /* default text in story is white for contrast */
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.story h2 {
+  color: #fff7e1; /* white heading on black background */
+  font-size: 2.6em;
+  line-height: 1.02;
+  margin: 0 0 12px 0;
+}
+
+/* Real Impact: paragraph color and heading visibility */
+.impact-story {
+  background-color: #fff7e1; /* light cream background for the whole impact section */
+  padding: 28px 20px;
+}
+
+.impact-story h2 {
+  color: #2E9DF7; /* heading on cream background */
+  margin-bottom: 18px;
+}
+
+.impact-story p {
+  color: #000; /* body paragraph black on cream background */
+  line-height: 1.6; /* add spacing between lines */
 }
 
 /* Call-to-Action Section Styles */
@@ -156,13 +197,17 @@ h2 {
   padding: 30px 20px;
 }
 
+.call-to-action h2 {
+  color: #2E9DF7; /* Make a Difference heading blue */
+  margin-bottom: 18px;
+}
+
 /* Style the impact story image */
 .impact-image {
   width: 100%;
   max-width: 320px;
-  border-radius: 10px;
   margin-bottom: 16px;
-  box-shadow: 0 2px 8px rgba(46, 157, 247, 0.10);
+  border-radius: 0;
 }
 
 /* Donate Button Styles */
@@ -172,7 +217,7 @@ h2 {
   color: #fff;
   padding: 20px 56px; /* larger button with more space */
   text-decoration: none;
-  border-radius: 8px;
+  border-radius: 8px; /* keep buttons rounded */
   font-weight: 400; /* normal weight */
   font-size: 1.12em; /* slightly bigger text */
   margin-top: 10px;
@@ -201,10 +246,15 @@ section {
 
 /* This media query applies styles when the screen is 600px wide or less (like on most phones) */
 @media (max-width: 600px) {
+  /* Reduce the top padding to match the smaller logo bar on phones */
+  body {
+    padding-top: 56px; /* a bit smaller than desktop to keep layout tight */
+  }
   /* Make hero section padding smaller on small screens */
   /* Reduce the hero photo height on small screens so content stays visible */
   .hero-image {
-    height: 100vh;
+    height: 40vh; /* keep the photo smaller on phones so the yellow band and CTA remain visible */
+    position: relative; /* ensure normal flow on small screens */
   }
 
   .site-logo {
@@ -212,14 +262,19 @@ section {
   }
 
   .hero-img-el {
-    transform: translateX(-50%) scale(1); /* reset zoom on small screens */
+    position: static;      /* remove absolute positioning so it flows nicely on mobile */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     object-position: 50% 30%;
+    transform: none;       /* no translate/scale on small screens */
+    display: block;
   }
 
   /* Let the yellow band size itself based on its content on small screens */
   .hero-content {
-    height: auto;
-    padding: 18px 12px;
+    height: auto;        /* let yellow band size to its content on phones */
+    padding: 18px 16px;
   }
 
   /* Adjust headline and subheadline sizes for phones */
@@ -267,3 +322,41 @@ section {
     width: 500px;
   }
 }
+
+  /* Social footer (last section) */
+  .social-footer {
+    background-color: #2E9DF7; /* Primary blue */
+    color: #fff;
+    width: 100%;
+    text-align: center;
+    padding: 18px 12px;
+    margin: 0; /* ensure it's the last section with no extra gap */
+  }
+
+  .social-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    align-items: center;
+  }
+
+  .social-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: background 0.18s, transform 0.12s;
+  }
+
+  .social-link:hover {
+    background: rgba(255,255,255,0.08);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 600px) {
+    .social-inner { gap: 16px; }
+    .social-link { font-size: 0.95em; }
+  }
